@@ -46,8 +46,8 @@ public class ClientApp {
 			boardService.pauseExecution(250); // (Aufgabe 1.1.5)
 			
 			// Einzelnes LED nehmen und ausschalten (Aufgabe 1.1.6)
-			for (int row = 0; row >= allLeds.length - 1; row++) {
-				for (int column = 0;  column >= allLeds[row].length - 1; column++) {
+			for (int row = 0; row <= allLeds.length - 1; row++) {
+				for (int column = 0;  column <= allLeds[row].length - 1; column++) {
 					Led currentLED = allLeds[row][column];
 					currentLED.turnOff();
 					
