@@ -13,10 +13,19 @@ public class ClientApp {
 		BoardService boardService = new BoardService(); // Neues Objekt für BoardService
 		// LedColor ledColor = new LedColor(); // Neues Objekt für ledColors
 
-		// @@@@@ ledsOnOff(boardService); // Mehtode ledsOnOff aufrufen und service mitgeben (Aufgabe 1.1)
-		// @@@@@ ledsColoredOnOff(boardService); // Methode ledsColoredOnOff aufrufen und service mitgeben (Aufgabe 1.2)
-		// @@@@@ switchEvenOdd(boardService); // Metode switchEvenOdd aufrufen und service mitgeben (Aufgabe 2)
-		switchRandom(boardService);
+		// @@@@@ ledsOnOff(boardService); // Mehtode ledsOnOff aufrufen und service
+		// mitgeben (Aufgabe 1.1)
+		// @@@@@ ledsColoredOnOff(boardService); // Methode ledsColoredOnOff aufrufen
+		// und service mitgeben (Aufgabe 1.2)
+		// @@@@@ switchEvenOdd(boardService); // Metode switchEvenOdd aufrufen und
+		// service mitgeben (Aufgabe 2)
+		// @@@@@ switchRandom(boardService); // Metode switchRandom aufrufen und
+		// service mitgeben (Aufgabe 3)
+		// @@@@@ showDecimal(boardService); // Metode showDecimal aufrufen und
+		// service mitgeben (Aufgabe 4)
+		// @@@@@ drawBorder(boardService); // Metode drawBorder aufrufen und
+		// service mitgeben (Aufgabe 4)
+		drawSquare(boardService);
 	}
 
 	private static void ledsOnOff(BoardService boardService) {
@@ -209,7 +218,7 @@ public class ClientApp {
 
 				boardService.pauseExecution(1000); // (Aufgabe 2.6)
 			}
-			
+
 			// Alle LEDs Ausschalten (Aufgabe 2.8)
 			for (int row = 0; row <= allLeds.length - 1; row++) {
 				for (int column = 0; column <= allLeds[row].length - 1; column++) {
@@ -219,14 +228,14 @@ public class ClientApp {
 						// LED Ausschalten ()
 						currentLED.turnOff();
 						boardService.pauseExecution(10);
-					} 
+					}
 				}
 			}
-			
+
 			boardService.pauseExecution(2000); // 2 Sek. Warten (Aufgabe 2.9)
-			
+
 			boardService.removeAllLeds(); // Alle LEDs Entfernen (Aufgabe 2.10)
-			
+
 		} else {
 			System.out.println("Die Anzahl LED Reihen ist nicht gültig");
 			return;
@@ -242,38 +251,38 @@ public class ClientApp {
 		// Einlesen von LED rows (Aufgabe 3.1)
 		System.out.println("Anzahl LED Reihen(1-32): ");
 		ledRows = sc.nextInt();
-		
-		if (ledRows <= BoardService.MAX_ROWS && ledRows > 0) { // Input Validation 
-			boardService.add(ledRows, LedColor.RANDOM); // LED Rows werden an Board gegeben mit Farbe Random (Aufgabe 3.2)
+
+		if (ledRows <= BoardService.MAX_ROWS && ledRows > 0) { // Input Validation
+			boardService.add(ledRows, LedColor.RANDOM); // LED Rows werden an Board gegeben mit Farbe Random (Aufgabe
+														// 3.2)
 			// Alle LEDS ins Array einlesen
 			Led[][] allLeds = boardService.getAllLeds();
-			
+
 			boardService.pauseExecution(2000); // (Aufgabe 3.3)
 
 			Random random = new Random(); // Random Zahl generieren (Aufgabe 3.4)
-			
-			// Alle Random Zahlen
-			int allRandomLeds = 32 * ledRows / 2;
-							
+
+			int allRandomLeds = 32 * ledRows / 2; // Alle Random Zahlen
+
 			// Alle Random LEDs einschalten (Aufgabe 3.4)
 			for (int counter = 0; counter < allRandomLeds; counter++) {
-				// 31 instead of 32 because random takes the range 0-32 and not 1-32
 				int randomLedColumn = random.nextInt(32);
 				int randomLedRow = random.nextInt(ledRows);
-				
-				// check if LED is already on
+
+				// Überprüfen ob LED an ist
 				if (allLeds[randomLedRow][randomLedColumn].isOn()) {
 					counter--;
 				} else {
 					allLeds[randomLedRow][randomLedColumn].turnOn();
 					boardService.pauseExecution(10);
 				}
-				
+
 			}
-			
-			boardService.pauseExecution(2000);
-			
-			for (int counter = 0; counter < 5; counter ++) {
+
+			boardService.pauseExecution(2000); // (Aufgabe 3.5)
+
+			// LEDs Invertieren (Aufgabe 3.6)
+			for (int counter = 0; counter < 5; counter++) { // 5 Mal ausführen (Aufgabe 3.8)
 				for (int row = 0; row <= allLeds.length - 1; row++) {
 					for (int column = 0; column <= allLeds[row].length - 1; column++) {
 						Led currentLED = allLeds[row][column];
@@ -289,21 +298,114 @@ public class ClientApp {
 						}
 					}
 				}
-				
-				// task 3.7 pause for 0.5 seconds
-				boardService.pauseExecution(500);
+
+				boardService.pauseExecution(500); // (Aufgabe 3.7)
 			}
-			
-			// task 3.9 pause for 2 seconds
-			boardService.pauseExecution(2000);
-			
-			// task 3.10 remove all LEDs
-			boardService.removeAllLeds();
+
+			boardService.pauseExecution(2000); // (Aufgabe 3.9)
+
+			boardService.removeAllLeds(); // (Aufgabe 3.10)
 
 		} else {
 			System.out.println("Die Anzahl LED Reihen ist nicht gültig");
 			return;
-		}		
+		}
+
+	}
+
+	private static void showDecimal(BoardService boardService) {
+		boardService.add(1); // eine LED reihe hinzufügen (Aufgabe 4.1)
+		
+		// Alle LEDS ins Array einlesen
+		Led[][] allLeds = boardService.getAllLeds();
+
+		String binaryValue = ""; // Variable deklarieren (Aufgabe 4.2)
+		
+		// Random Zahl generieren		
+		Random random = new Random(); 
+	
+		// LEDs Random einschalten in Binär (Aufgabe 4.2)
+		for (int counter = 0; counter < 32; counter++) {
+			if (random.nextBoolean()) {
+				allLeds[0][counter].turnOn();
+				binaryValue += "1";
+			} else {
+				binaryValue += "0";
+			}
+
+		}
+		
+		int decimalValue = Integer.parseUnsignedInt(binaryValue, 2); // Binärer String in Dezimal umwandeln (Aufgabe 4.3)
+		// Funktioniert, wir wissen nicht Warum @@@@@@@ Abklären
+		
+		System.out.println("Binary Value: " + decimalValue);
+	}
+	
+	private static void drawBorder(BoardService boardService) {
+		boardService.add(BoardService.MAX_ROWS); // Maximale Anzahl LED Reihen hinzugefügt. (Aufgabe 5.1)
+		
+		boardService.pauseExecution(2000); // (Aufgabe 5.1)
+	
+		// Alle LEDS ins Array einlesen
+		Led[][] allLeds = boardService.getAllLeds();
+		
+		// Rand Zeichnen (Aufgabe 5.2)
+		for (int row = 0; row < 32; row++) {
+			for (int column = 0; column < 32; column++) {
+				// Wenn am Anfang/Ende der Zeile oder Erste/Letzte Reihe
+				if (column == 0 || column == 31 || row == 0 || row == 31) { 
+					allLeds[column][row].turnOn();
+				}
+			}
+		}
+		
+		boardService.pauseExecution(2000); // (Aufgabe 5.3)
+		
+		// LEDs am Rand wieder ausschalten (Aufgabe 5.4)
+		for (int row = 0; row < 32; row++) {
+			for (int column = 0; column < 32; column++) {
+				// Wenn am Anfang/Ende der Zeile oder Erste/Letzte Reihe
+				if (column == 0 || column == 31 || row == 0 || row == 31) { 
+					allLeds[column][row].turnOff();
+				}
+			}
+		}
+		
+		boardService.pauseExecution(2000); // (Aufgabe 5.5)
+		
+		boardService.removeAllLeds(); // (Aufgabe 5.6)
+	}
+
+	private static void drawSquare(BoardService boardService) {
+		boardService.add(BoardService.MAX_ROWS); // Maximale Anzahl LED Reihen hinzugefügt. (Aufgabe 6.1)
+		
+		Scanner sc = new Scanner(System.in);
+		
+		Led[][] allLeds = boardService.getAllLeds();
+		
+		System.out.println("Geben Sie die X Koordinate vom Startpunkt ein(1-32): ");
+		int xTopLeft = sc.nextInt() - 1; // -1 da Index in der Tabelle 0-31
+		
+		System.out.println("Geben Sie die Y Koordinate vom Startpunkt ein(1-32): ");
+		int yTopLeft = sc.nextInt() - 1 ; // -1 da Index in der Tabelle 0-31
+		
+		System.out.println("Geben Sie die Länge des Quadrates(1-32): ");
+		int squareLenght = sc.nextInt() - 1;
+		
+		if(xTopLeft + squareLenght <= 31 && yTopLeft + squareLenght <= 31 && xTopLeft >= 0 && yTopLeft >= 0 && squareLenght >= 0 ) {
+			for (int row = xTopLeft; row <= xTopLeft + squareLenght; row++) {
+				for (int column = yTopLeft; column <= yTopLeft + squareLenght; column++) {
+					// Wenn am Anfang/Ende der Zeile oder Erste/Letzte Reihe
+					if (column == yTopLeft || column == yTopLeft + squareLenght || row == xTopLeft || row == xTopLeft + squareLenght) { 
+						allLeds[column][row].turnOn();
+					}
+				}
+			}
+			
+		} else {
+			System.out.println("Falscher Input");
+			return;
+		}			
 		
 	}
 }
