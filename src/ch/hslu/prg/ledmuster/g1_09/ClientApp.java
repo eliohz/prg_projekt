@@ -11,32 +11,47 @@ public class ClientApp {
 
 	public static void main(String[] args) {
 		BoardService boardService = new BoardService(); // Neues Objekt für BoardService
-		// LedColor ledColor = new LedColor(); // Neues Objekt für ledColors
 		// @@@@@ ledsOnOff(boardService); // Mehtode ledsOnOff aufrufen und service
 		// mitgeben (Aufgabe 1.1)
+		
 		// @@@@@ ledsColoredOnOff(boardService); // Methode ledsColoredOnOff aufrufen
 		// und service mitgeben (Aufgabe 1.2)
+		
 		// @@@@@ switchEvenOdd(boardService); // Metode switchEvenOdd aufrufen und
 		// service mitgeben (Aufgabe 2)
+		
 		// @@@@@ switchRandom(boardService); // Metode switchRandom aufrufen und
 		// service mitgeben (Aufgabe 3)
+		
 		// @@@@@ showDecimal(boardService); // Metode showDecimal aufrufen und
 		// service mitgeben (Aufgabe 4)
+		
 		// @@@@@ drawBorder(boardService); // Metode drawBorder aufrufen und
 		// service mitgeben (Aufgabe 5)
+		
 		// @@@@ drawSquare(boardService); // Metode drawBorder aufrufen und
 		// service mitgeben (Aufgabe 6.1)
+		
 		// @@@@@ drawSquareWithDiagonals(boardService);
 		// service mitgeben (Aufgabe 6.2)
+		
 		// @@@@@ drawRectangle(boardService);
 		// service mitgeben (Aufgabe 7)
+		
 		// @@@@@ drawTriangle(boardService);
 		// service mitgeben (Aufgabe 8)
+		
 		// @@@@@ createRunningLight(boardService);
 		// service mitgeben (Aufgabe 9)
-		countColors(boardService);
-		// service mitgeben (Aufgabe 10)
 		
+		// @@@@@ countColors(boardService);
+		// service mitgeben (Aufgabe 10.1)
+		
+		//countColorsExt(boardService);
+		// service mitgeben (Aufgabe 10.2)
+		
+		countRedLedsOnDiagonals(boardService);
+		// service mitgeben (Aufgabe 10.3)
 	}
 
 	private static void ledsOnOff(BoardService boardService) {
@@ -492,7 +507,7 @@ public class ClientApp {
 
 			if (xBottomRight - xTopLeft >= 2 && yBottomRight - yTopLeft >= 2) {
 				inputCorrect = true;
-				
+
 			} else {
 				System.out.println("Ungueltige Eingabe!");
 			}
@@ -504,17 +519,17 @@ public class ClientApp {
 				allLeds[row][col].turnOn();
 			}
 		}
-		
+
 		// Pause 3sek (Aufgabe 7.6)
 		boardService.pauseExecution(3000);
-		
+
 		// Nur Rand des Rechtecks, innen ausschalten (Aufgabe 7.7)
 		for (int row = xTopLeft + 1; row < xBottomRight; row++) {
 			for (int col = yTopLeft + 1; col < yBottomRight; col++) {
 				allLeds[row][col].turnOff();
 			}
 		}
-		
+
 		// Pause 3sek (Aufgabe 7.8)
 		boardService.pauseExecution(3000);
 
@@ -529,89 +544,131 @@ public class ClientApp {
 		boardService.pauseExecution(2000);
 		boardService.removeAllLeds();
 	}
-	
+
 	private static void drawTriangle(BoardService boardService) {
-        Scanner sc = new Scanner(System.in);
-        
-        // Hoehe des Dreiecks einlesen (Aufgabe 8.1)
-        System.out.println("Geben Sie die Hoehe des Dreiecks ein (mindestens 2): ");
-        int height = sc.nextInt();
-        
-        // Input Validation (Aufgabe 8.1)
-        if (height < 2 || height > 17) {
-            System.out.println("Ungueltige Hoehe");
-            return;
-        }
-        
-        boardService.add(height);  // Füge LED-Reihen entsprechend der Höhe hinzu (Aufgabe 8.2)
-        Led[][] allLeds = boardService.getAllLeds();
-        
-        // Zeichne das Dreieck zeilenweise (Aufgabe 8.3)
-        for (int i = 0; i < height; i++) {
-            int numLeds = 2 * i + 1;
-            int offset = (allLeds[i].length - numLeds) / 2; // Zentrieren des Dreiecks
-            for (int col = offset; col < offset + numLeds; col++) {
-                allLeds[i][col].turnOn();
-            }
-            boardService.pauseExecution(200);
-        }
-        boardService.pauseExecution(2000);
-        boardService.removeAllLeds();
-    }
-	
+		Scanner sc = new Scanner(System.in);
+
+		// Hoehe des Dreiecks einlesen (Aufgabe 8.1)
+		System.out.println("Geben Sie die Hoehe des Dreiecks ein (mindestens 2): ");
+		int height = sc.nextInt();
+
+		// Input Validation (Aufgabe 8.1)
+		if (height < 2 || height > 17) {
+			System.out.println("Ungueltige Hoehe");
+			return;
+		}
+
+		boardService.add(height); // Füge LED-Reihen entsprechend der Höhe hinzu (Aufgabe 8.2)
+		Led[][] allLeds = boardService.getAllLeds();
+
+		// Zeichne das Dreieck zeilenweise (Aufgabe 8.3)
+		for (int i = 0; i < height; i++) {
+			int numLeds = 2 * i + 1;
+			int offset = (allLeds[i].length - numLeds) / 2; // Zentrieren des Dreiecks
+			for (int col = offset; col < offset + numLeds; col++) {
+				allLeds[i][col].turnOn();
+			}
+			boardService.pauseExecution(200);
+		}
+		boardService.pauseExecution(2000);
+		boardService.removeAllLeds();
+	}
+
 	private static void createRunningLight(BoardService boardService) {
-        // Eine einzelne Reihe an LEDs erstelle (Aufgabe 9.1)
-		boardService.add(1); 
-		
-        Led[][] allLeds = boardService.getAllLeds();
-        
-        // Setze die vier farbigen Bereiche (Aufgabe 9.2):
-        // - Spalte 24-31: grüner Bereich
-        // - Spalte 16-23: roter Bereich
-        // - Spalte 8-15: blauer Bereich
-        // - Spalte 0-7: gelber Bereich
-        for (int col = 0; col < allLeds[0].length; col++) {
-            if (col >= 24) {
-                boardService.replace(allLeds[0][col], LedColor.GREEN);
-            } else if (col >= 16) {
-            	boardService.replace(allLeds[0][col], LedColor.RED);
-            } else if (col >= 8) {
-            	boardService.replace(allLeds[0][col], LedColor.BLUE);
-            } else {
-            	boardService.replace(allLeds[0][col], LedColor.YELLOW);
-            }
-        }
-        
-        // Alle Leds neu einlesen und einschalten (Aufgabe 9.3)
-        allLeds = boardService.getAllLeds();
-        
-        for (int i = 0; i < 32; i++) {
-        	allLeds[0][i].turnOn();
-        }
-        
-        // Verschiebe die LEDs um 32 Positionen pro Zyklus; insgesamt 3 vollständige Zyklen (96 Schritte)
-        for (int cycle = 0; cycle < 96; cycle++) {
-            allLeds = boardService.getAllLeds();
+		// Eine einzelne Reihe an LEDs erstelle (Aufgabe 9.1)
+		boardService.add(1);
 
-            Led vorherigesLed = allLeds[0][boardService.LEDS_PER_ROW-1];
-            LedColor vorherigeFarbe = vorherigesLed.getColor();
-            
-            for (int i = boardService.LEDS_PER_ROW-1; i > 0; i--) {
-                allLeds = boardService.getAllLeds();
+		Led[][] allLeds = boardService.getAllLeds();
 
-                boardService.replace(allLeds[0][i], allLeds[0][i-1].getColor());
-            }
-            
-            boardService.replace(allLeds[0][0], vorherigeFarbe);
-            boardService.pauseExecution(10);
-        }
-        boardService.removeAllLeds();
-    }
-	
+		// Setze die vier farbigen Bereiche (Aufgabe 9.2):
+		// - Spalte 24-31: grüner Bereich
+		// - Spalte 16-23: roter Bereich
+		// - Spalte 8-15: blauer Bereich
+		// - Spalte 0-7: gelber Bereich
+		for (int col = 0; col < allLeds[0].length; col++) {
+			if (col >= 24) {
+				boardService.replace(allLeds[0][col], LedColor.GREEN);
+			} else if (col >= 16) {
+				boardService.replace(allLeds[0][col], LedColor.RED);
+			} else if (col >= 8) {
+				boardService.replace(allLeds[0][col], LedColor.BLUE);
+			} else {
+				boardService.replace(allLeds[0][col], LedColor.YELLOW);
+			}
+		}
+
+		// Alle Leds neu einlesen und einschalten (Aufgabe 9.3)
+		allLeds = boardService.getAllLeds();
+
+		for (int i = 0; i < 32; i++) {
+			allLeds[0][i].turnOn();
+		}
+
+		// Verschiebe die LEDs um 32 Positionen pro Zyklus; insgesamt 3 vollständige (Aufgabe 9.4)
+		// Zyklen (96 Schritte)
+		for (int cycle = 0; cycle < 96; cycle++) {
+			allLeds = boardService.getAllLeds();
+
+			Led vorherigesLed = allLeds[0][boardService.LEDS_PER_ROW - 1];
+			LedColor vorherigeFarbe = vorherigesLed.getColor();
+
+			for (int i = boardService.LEDS_PER_ROW - 1; i > 0; i--) {
+				allLeds = boardService.getAllLeds();
+
+				boardService.replace(allLeds[0][i], allLeds[0][i - 1].getColor());
+			}
+
+			boardService.replace(allLeds[0][0], vorherigeFarbe);
+			boardService.pauseExecution(10);
+		}
+		boardService.removeAllLeds();
+	}
+
 	private static void countColors(BoardService boardService) {
-        boardService.add(BoardService.MAX_ROWS, LedColor.RANDOM);
+		// Maximale ANZ LEDs + Random Color (Aufgabe 10.1.1)
+		boardService.add(BoardService.MAX_ROWS, LedColor.RANDOM); 
+		Led[][] allLeds = boardService.getAllLeds();
+		
+		// Alle LEDs einschalten und 2 Sekunden warten (Aufgabe 10.1.2)
+		for (int row = 0; row < allLeds.length; row++) {
+			for (int col = 0; col < allLeds[row].length; col++) {
+				allLeds[row][col].turnOn();
+			}
+		}
+		boardService.pauseExecution(2000);
+		
+		// Variable Anzahl Farben deklarieren (Aufgabe 10.1.3)
+		int countRed = 0, countGreen = 0, countBlue = 0, countYellow = 0;
+
+		// Zählen der Anzahl Farben (Aufgabe 10.1.3)
+		for (int row = 0; row < allLeds.length; row++) {
+			for (int col = 0; col < allLeds[row].length; col++) {
+				LedColor color = allLeds[row][col].getColor();
+				if (color == LedColor.RED) {
+					countRed++;
+				} else if (color == LedColor.GREEN) {
+					countGreen++;
+				} else if (color == LedColor.BLUE) {
+					countBlue++;
+				} else if (color == LedColor.YELLOW) {
+					countYellow++;
+				}
+			}
+		}
+		// Ausgeben der Anzahl Farben (Aufgabe 10.1.4)
+		System.out.println("RED: " + countRed + " LEDs");
+		System.out.println("GREEN: " + countGreen + " LEDs");
+		System.out.println("BLUE: " + countBlue + " LEDs");
+		System.out.println("YELLOW: " + countYellow + " LEDs");
+
+		boardService.removeAllLeds();
+	}
+	
+	private static void countColorsExt(BoardService boardService) {
+        // Maximale ANZ LEDs + Random Color (Aufgabe 10.2.1)
+		boardService.add(BoardService.MAX_ROWS, LedColor.RANDOM);
         Led[][] allLeds = boardService.getAllLeds();
-        // Schalte alle LEDs ein
+		// Alle LEDs einschalten und 2 Sekunden warten (Aufgabe 10.2.2)
         for (int row = 0; row < allLeds.length; row++) {
             for (int col = 0; col < allLeds[row].length; col++) {
                 allLeds[row][col].turnOn();
@@ -619,44 +676,7 @@ public class ClientApp {
         }
         boardService.pauseExecution(2000);
         
-        int countRed = 0, countGreen = 0, countBlue = 0, countYellow = 0;
-        
-        for (int row = 0; row < allLeds.length; row++) {
-            for (int col = 0; col < allLeds[row].length; col++) {
-                LedColor color = allLeds[row][col].getColor();
-                if (color == LedColor.RED) {
-                    countRed++;
-                } else if (color == LedColor.GREEN) {
-                    countGreen++;
-                } else if (color == LedColor.BLUE) {
-                    countBlue++;
-                } else if (color == LedColor.YELLOW) {
-                    countYellow++;
-                }
-            }
-        }
-        System.out.println("RED: " + countRed + " LEDs");
-        System.out.println("GREEN: " + countGreen + " LEDs");
-        System.out.println("BLUE: " + countBlue + " LEDs");
-        System.out.println("YELLOW: " + countYellow + " LEDs");
-        
-        boardService.removeAllLeds();
-    }
-    
-    // -----------------------------------------------
-    // Aufgabe 10.2: countColorsExt
-    // Bestimmt für jede Farbe die Spalte, in der die meisten LEDs dieser Farbe vorhanden sind, und gibt Spaltennummer und Anzahl aus.
-    private static void countColorsExt(BoardService boardService) {
-        boardService.add(BoardService.MAX_ROWS, LedColor.RANDOM);
-        Led[][] allLeds = boardService.getAllLeds();
-        // Schalte alle LEDs ein
-        for (int row = 0; row < allLeds.length; row++) {
-            for (int col = 0; col < allLeds[row].length; col++) {
-                allLeds[row][col].turnOn();
-            }
-        }
-        boardService.pauseExecution(2000);
-        
+        // Variabeln Deklarieren um zu zählen (Aufgabe 10.2.3)
         int maxRedCount = 0, redColumn = 0;
         int maxGreenCount = 0, greenColumn = 0;
         int maxBlueCount = 0, blueColumn = 0;
@@ -665,6 +685,7 @@ public class ClientApp {
         int columns = allLeds[0].length;
         int rows = allLeds.length;
         
+        // LED Farben Zählen pro reihe (Aufgabe 10.2.3)
         for (int col = 0; col < columns; col++) {
             int redCount = 0, greenCount = 0, blueCount = 0, yellowCount = 0;
             for (int row = 0; row < rows; row++) {
@@ -679,6 +700,7 @@ public class ClientApp {
                     yellowCount++;
                 }
             }
+            // Anzahl in max Reinschreiben wenn grösser als eine zuvor
             if (redCount >= maxRedCount) {
                 maxRedCount = redCount;
                 redColumn = col;
@@ -695,48 +717,54 @@ public class ClientApp {
                 maxYellowCount = yellowCount;
                 yellowColumn = col;
             }
-        }
         
+        }
+        // Maximale Farbe pro Reihe Ausgeben (10.2.4)
         System.out.println("RED: " + maxRedCount + " LEDs in der Spalte Nr. " + redColumn);
         System.out.println("GREEN: " + maxGreenCount + " LEDs in der Spalte Nr. " + greenColumn);
         System.out.println("BLUE: " + maxBlueCount + " LEDs in der Spalte Nr. " + blueColumn);
         System.out.println("YELLOW: " + maxYellowCount + " LEDs in der Spalte Nr. " + yellowColumn);
         
         boardService.removeAllLeds();
-    }
-    
-    // -----------------------------------------------
-    // Aufgabe 10.3: countRedLedsOnDiagonals
-    // Zählt und gibt die Anzahl der roten LEDs auf der Hauptdiagonale und der Hilfsdiagonale aus.
-    private static void countRedLedsOnDiagonals(BoardService boardService) {
-        boardService.add(BoardService.MAX_ROWS, LedColor.RANDOM);
+       
+	}
+
+	private static void countRedLedsOnDiagonals(BoardService boardService) {
+        // Maximale ANZ LEDs + Random Color (Aufgabe 10.3.1)
+		boardService.add(BoardService.MAX_ROWS, LedColor.RANDOM);
         Led[][] allLeds = boardService.getAllLeds();
-        // Optional: Schalte alle LEDs ein, falls gewünscht
-        // for (int row = 0; row < allLeds.length; row++) {
-        //     for (int col = 0; col < allLeds[row].length; col++) {
-        //         allLeds[row][col].turnOn();
-        //     }
-        // }
         
+		// Alle LEDs einschalten und 2 Sekunden warten
+        for (int row = 0; row < allLeds.length; row++) {
+            for (int col = 0; col < allLeds[row].length; col++) {
+                allLeds[row][col].turnOn();
+            }
+        }
+        boardService.pauseExecution(2000);
+        
+        // Variablen definineren
         int mainDiagonalRed = 0;
         int secondaryDiagonalRed = 0;
-        int size = allLeds.length; // Annahme: quadratisches LED-Board (z. B. 32x32)
+        int size = allLeds.length;
+        
+        // Anzahl LEDs an der Haupt Diagonale zaehlen (Aufgabe 10.3.2)
         for (int i = 0; i < size; i++) {
             if (allLeds[i][i].getColor() == LedColor.RED) {
                 mainDiagonalRed++;
             }
         }
+        // Anzahl LEDs an der Hilfsdiagonale zaehlen (Aufgabe 10.3.3)
         for (int i = 0; i < size; i++) {
             if (allLeds[i][allLeds[i].length - 1 - i].getColor() == LedColor.RED) {
                 secondaryDiagonalRed++;
             }
         }
         
-        System.out.println("RED LEDs Haupt-Diagonale: " + mainDiagonalRed);
-        System.out.println("RED LEDs Hilfs-Diagonale: " + secondaryDiagonalRed);
+        // Werte Ausgeben (Aufgabe 10.3.4)
+        System.out.println("Rote LEDs an der Haupt Diagonale: " + mainDiagonalRed);
+        System.out.println("Rote LEDs an der Hilfsdiagonale: " + secondaryDiagonalRed);
         
         boardService.removeAllLeds();
-    }
-}
 
+	}
 }
